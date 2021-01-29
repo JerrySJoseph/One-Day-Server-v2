@@ -22,6 +22,7 @@ Queue.InitQueue()
 const version='v2'
 
 //Routes
+//TODO: Add authorized Middleware before deploying to production
 app.use(`/api/${version}/profile`,profileRouter)
 app.use(`/api/${version}/chat`,isAuthorized,chatRouter)
 app.use(`/api/${version}/credit`,isAuthorized,creditRouter)
