@@ -1,22 +1,12 @@
 const Queue =require('../_commonUtils/RMQConnection')
+const request=require('../_commonUtils/RequestHandler')
 
+//Initialising Event Queues for inter-service communication
 Queue.InitQueue(()=>{
 
-    Queue.getQueue().createChannel(function(error1, channel) {
-        if (error1) {
-        throw error1;
-        }
-        var queue = 'profile_queue';
-
-        channel.assertQueue(queue, {
-        durable: false
-        });
-
-        channel.consume(queue, (msg)=>{
-            console.log("recieved : %s", (msg.content.toString()));
-        });
-        
-    });
+    request.PullfromQueue('user_create_queue',(data,responseCallback)=>{
+console.log("CREATING Profile for "+data)
+responseCallback("DOne");
+});
 })
-
 
