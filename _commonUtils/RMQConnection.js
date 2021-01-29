@@ -7,24 +7,33 @@ const Url='amqp://localhost'
 let conn;
 
 //Method to Init Queue instance
-function InitQueue(callback)
+function InitQueue()
 {
     amqp.connect(Url,(err,connection)=>{
+        //If error Initiating Connection
         if(err)
-            callback({
-                success:false,
-                error:err
-            })
-        else
-           {
-            conn=connection;
-           callback({
-                success:true,
-                connection:connection
-            })
-           } 
+        {
+            console.log("[RabbitMQ] Error:"+err.message);
+            return setTimeout(InitQueue(),1000)
+        }
 
-})
+        //On connection Error
+        connection.on("error", function(err) {
+            if (err.message !== "Connection closing") {
+                console.error("[RabbitMQ] conn error", err.message);
+            }
+            });
+
+        //On Connection Closed
+        connection.on("close", function() {
+            console.error("[RabbitMQ] reconnecting");
+            return setTimeout(InitQueue(), 1000);
+            });
+            
+        //Assigning connection to export
+        conn=connection;
+        console.log("[RabbitMQ] connection succesfull")
+        })
 }
 
 //Method to existing Queue Instance

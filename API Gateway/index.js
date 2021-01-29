@@ -16,18 +16,13 @@ const app=express();
 const PORT= process.env.PORT | 3000
 
 //Initialising Event Queues for inter-service communication
-Queue.InitQueue((some)=>{
-if(some.success)
-        console.log("Queue Connected")
-    else
-        console.log("Error Connection to QUEUE")
-})
+Queue.InitQueue()
 
 //Current Version of the API
 const version='v2'
 
 //Routes
-app.use(`/api/${version}/profile`,isAuthorized,profileRouter)
+app.use(`/api/${version}/profile`,profileRouter)
 app.use(`/api/${version}/chat`,isAuthorized,chatRouter)
 app.use(`/api/${version}/credit`,isAuthorized,creditRouter)
 app.use(`/api/${version}/match`,isAuthorized,matchRouter)
