@@ -23,9 +23,9 @@ async function PushRequest(params,callback)
             channel.consume(q.queue,(msg)=>{
               
               if (msg.properties.correlationId == params.requestID)
-                console.info(`Profile Reciever 1: ${msg.content.toString()}`);
+                console.info(`${params.routingKey}RPS RECIEVER: ${msg.content.toString()}`);
                 channel.ack(msg);
-                return callback(null,msg);
+                return callback(null,JSON.parse(msg.content.toString()));
             })
 
             //******************** PUBLISHER EVENT **************************/
@@ -61,14 +61,14 @@ connection.createChannel((error0,channel)=>{
         channel.assertQueue('',{exclusive:true},(error3,q)=>{
             if(error3)
                return console.error(error3)
-            console.info(`Waiting for messaged in Que [${q.queue}]`)
+            console.info(`Waiting for Requests in Que [${q.queue}]`)
             channel.bindQueue(q.queue,params.exchange,params.routingKey);
             channel.consume(q.queue,(msg)=>{
-                console.info(`Recieved :${msg.content.toString()}`);
+                console.info(`Recieved :rID:${msg.properties.correlationId}`);
                 channel.ack(msg);
-                onRequest(msg,(error,result)=>{
+                onRequest(JSON.parse(msg.content.toString()),(result)=>{
                      console.log('ID:'+msg.properties.correlationId+' replyTo:'+msg.properties.replyTo)
-                        channel.sendToQueue(msg.properties.replyTo,Buffer.from("RPC RESPONSE"), {
+                        channel.sendToQueue(msg.properties.replyTo,Buffer.from(JSON.stringify(result)), {
                         correlationId: msg.properties.correlationId
                         })
                 })

@@ -8,7 +8,7 @@ router.post('/create',async (req,res)=>{
     exchange:'user',
     routingKey:'user.event.create',
     requestID:req.body.requestID,
-    data:req.body.data
+    data:JSON.stringify(req.body.data)
   };
     PushRequest(params,(error,result)=>{
         res.send(result);
@@ -23,7 +23,7 @@ router.post('/update',(req,res)=>{
     exchange:'user',
     routingKey:'user.event.update',
     requestID:req.body.requestID,
-    data:req.body.data
+    data:req.body.data.toString()
   };
     PushRequest(params,(error,result)=>{
         res.send(result);
@@ -36,7 +36,7 @@ router.post('/delete',(req,res)=>{
     exchange:'user',
     routingKey:'user.event.delete',
     requestID:req.body.requestID,
-    data:req.body.data
+    data:req.body.data.toString()
   };
     PushRequest(params,(error,result)=>{
         res.send(result);

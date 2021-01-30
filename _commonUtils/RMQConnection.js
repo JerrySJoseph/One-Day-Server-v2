@@ -20,20 +20,24 @@ const getMyConnection=new Promise((resolve,reject)=>{
         if(err)
         {
             console.error("[RabbitMQ] Error:"+err.message);
+            console.log(err)
             reject(err);
         }
 
         //On connection Error
         connection.on("error", function(err) {
             if (err.message !== "Connection closing") {
-                console.error("[RabbitMQ] Error:"+err.message)
+                console.error("[RabbitMQ] Connection closing Error:")
+                console.log(err)
             }
             });
 
         //On Connection Closed
         connection.on("close", function() {
             console.error("[RabbitMQ] reconnecting");
-            return setTimeout(getConnection, 1000);
+            return setTimeout(()=>{
+                getMyConnection
+            }, 1000);
             });
             
         //Assigning connection to export
