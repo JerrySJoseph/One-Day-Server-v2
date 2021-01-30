@@ -4,15 +4,13 @@ const request=require('../../_commonUtils/RequestHandler')
 
 router.post('/create',(req,res)=>{
 
-  const data={
-      id:"Some Id",
-      data:"Some Data"
-    }
-  request.PushToQueue('user_create_queue',data,(err,result)=>{
+  request.PushToQueue('user_create_queue',req.body,(err,result)=>{
     if(err)
-    console.log("[R-Handler]:Error:"+err.message)
+    {console.log("[R-Handler]:Error:"+err.message)
+    return res.send(err.message);
+      }
     else
-    res.send(JSON.stringify(result));
+    return res.send(result);
   })
    
  
@@ -21,8 +19,6 @@ router.post('/create',(req,res)=>{
 router.post('/read',(req,res)=>{
     
 })
-
-
 
 
 module.exports=router

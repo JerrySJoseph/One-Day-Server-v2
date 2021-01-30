@@ -21,6 +21,7 @@ Queue.InitQueue()
 //Current Version of the API
 const version='v2'
 
+app.use(express.json())
 //Routes
 //TODO: Add authorized Middleware before deploying to production
 app.use(`/api/${version}/profile`,profileRouter)

@@ -13,14 +13,14 @@ function InitQueue(callback)
         //If error Initiating Connection
         if(err)
         {
-            console.log("[RabbitMQ] Error:"+err.message);
+            console.error("[RabbitMQ] Error:"+err.message);
             return setTimeout(InitQueue,1000)
         }
 
         //On connection Error
         connection.on("error", function(err) {
             if (err.message !== "Connection closing") {
-                console.error("[RabbitMQ] conn error:", err.message);
+                console.error(err);
             }
             });
 
@@ -32,7 +32,7 @@ function InitQueue(callback)
             
         //Assigning connection to export
         conn=connection;
-        console.log("[RabbitMQ] connection succesfull")
+        console.info("[RabbitMQ] connection succesfull")
         if(callback)
          callback(conn);
         })
