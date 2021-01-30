@@ -1,54 +1,33 @@
-const Queue =require('../_commonUtils/RMQConnection')
-const request=require('../_commonUtils/RequestHandler')
+const {PullRequest}=require('./Utils/RequestHandler')
 const mongoose=require('mongoose');
-const {QUEUE_TAG}=require('../Constants/QueuVars')
+const log=require('./Utils/log');
 const {prepareProfileObject} = require('./Utils/ProfileHelper')
+const Queue=require('./Utils/RMQConnection')
 
-//Initialising Event Queues for inter-service communication
-Queue.InitQueue(()=>{
 
-    mongoose.connect('mongodb://localhost:27017/one_day_profiles_db', {useNewUrlParser:true,useUnifiedTopology:true},(error)=>{
+mongoose.connect('mongodb://localhost:27017/one_day_profiles_db',
+    {useNewUrlParser:true,useUnifiedTopology:true},
+    (error)=>{
         if(error)
-            return console.error("[PROFILE SERVICE] DB Error:%s",error.message)
+            return log.error(error.message);
+        log.info('Connected to Database')
+       //Registering Pull Requests for Queues
+        PullRequest({exchange:'user',routingKey:'user.event.create'},createEvent);
+        PullRequest({exchange:'user',routingKey:'user.event.update'},updateEvent);
+        PullRequest({exchange:'user',routingKey:'user.event.delete'},deleteEvent);
+        log.info('Events Registered')     
+       
         
-        console.info("[PROFILE SERVICE] DB Connection Successfull");
+    })
 
-        //Pull Events for CREATE USER
-        request.PullfromQueue(QUEUE_TAG.create_user,(data,responseCallback)=>{
-            //Perform Operations
-            const userProfile=prepareProfileObject(data);
-            userProfile.updateOne(userProfile,{upsert:true},(mongoError,result)=>{
-                
-                //After complete call reponseCallback('data')
-                if(mongoError)
-                    responseCallback({
-                        success:false,
-                        message:mongoError.message
-                    })
-                else  responseCallback({
-                        success:true,
-                        message:"Profile Saved SuccessFully"
-                    })
-            })
-            
-        });
 
-        //Pull Events for UPDATE USER
-        request.PullfromQueue(QUEUE_TAG.update_user,(data,responseCallback)=>{
-            //Perform Operations
 
-            //After complete call reponseCallback('data')
-
-        });
-        //Pull Events for DELETE USER
-        request.PullfromQueue(QUEUE_TAG.delete_user,(data,responseCallback)=>{
-            //Perform Operations
-
-            //After complete call reponseCallback('data')
-
-        });
-        })
-
-    
-})
-
+function createEvent(data,onFinish){
+    setTimeout(onFinish('Create Event Finished'),3000);
+}
+function updateEvent(data,onFinish){
+    setTimeout(onFinish('Update Event Finished'),3000);
+}
+function deleteEvent(data,onFinish){
+    setTimeout(onFinish('Delete Event Finished'),3000);
+}

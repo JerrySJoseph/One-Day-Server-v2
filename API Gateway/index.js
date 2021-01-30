@@ -13,7 +13,11 @@ const { isAuthorized } = require('./Utils/Authorization');
 //Initialising Express Server
 const app=express();
 
-Queue.getConnection();
+//Initialising Queue for inter Service communications
+Queue.getMyConnection
+    .then(()=>log.info('GATEWAY QUEUE STARTED'))
+    .catch((err)=>log.error(err))
+
 //Defininng port for API Gateway
 const PORT= process.env.PORT | 3000
 
