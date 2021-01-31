@@ -91,5 +91,8 @@ const updateEvent=async (data,onFinish)=>{
 const deleteEvent=async(data,onFinish)=>{
 
     await Profile.deleteOne({_id:data._id})
-    onFinish({data:data})
+    onFinish(response={
+                    success:true,
+                    message:'User with ID: '+data._id+' deleted.'
+                })
 }
