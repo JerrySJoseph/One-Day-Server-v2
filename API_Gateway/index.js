@@ -19,7 +19,7 @@ Queue.getMyConnection
     .catch((err)=>log.error(err))
 
 //Defininng port for API Gateway
-const PORT= process.env.PORT | 3000
+const PORT= process.env.PORT || 3000
 
 //Current Version of the API
 const version='v2'
