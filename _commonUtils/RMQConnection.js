@@ -36,7 +36,7 @@ const getMyConnection=new Promise((resolve,reject)=>{
         connection.on("close", function() {
             console.error("[RabbitMQ] reconnecting");
             return setTimeout(()=>{
-                getMyConnection
+                getMyConnection.then();
             }, 1000);
             });
             

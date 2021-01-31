@@ -1,31 +1,25 @@
-const Queue=require('./RMQConnection');
 const log=require('./log');
 
-async function PushRequest(params,callback)
+async function PushRequest(params,channel,callback)
 {
-  let response=null;
-  //Getting the Cached Connection  
- //const connection=await Queue.getConnection();
-  Queue.getMyConnection.then((connection)=>{
-    connection.createChannel((error0,channel)=>{
-    //Error Handling
-    if(error0)return callback(error0,response);
-
-    log.info(`Channel created for ${params.routingKey}`)
-
-        /************************** Establishing QUEUE*********************** */
-        channel.assertQueue('',{exclusive:true},(error3,q)=>{
+  
+/************************** Establishing QUEUE*********************** */
+        channel.assertQueue('',{autoDelete:true},(error3,q)=>{
             if(error3)
-               return console.error(error3)
+               return callback(error3)
             console.info(`Waiting for Response in Que [${q.queue}]`)
-
             /********************** MicroService Response***********************/
             channel.consume(q.queue,(msg)=>{
               
               if (msg.properties.correlationId == params.requestID)
-                console.info(`${params.routingKey}RPS RECIEVER: ${msg.content.toString()}`);
+              {
+                console.info(`${q.queue} RPS RECIEVER: ${msg.content.toString()}`);
                 channel.ack(msg);
-                return callback(null,JSON.parse(msg.content.toString()));
+              
+               channel.cancel(msg.fields.consumerTag);
+                return callback(JSON.parse(msg.content.toString()));
+              }
+                
             })
 
             //******************** PUBLISHER EVENT **************************/
@@ -36,36 +30,23 @@ async function PushRequest(params,callback)
             })
             
         })
-    
-    
-  })
-  }).catch((error)=>{
-    log.error(error);
-  })
-
   
 }
-async function PullRequest(params,onRequest){
+async function PullRequest(params,channel,onRequest){
 
-  let response=null;
-  //Getting the Cached Connection  
- // const connection=await Queue.getConnection();
- Queue.getMyConnection.then((connection)=>{
-connection.createChannel((error0,channel)=>{
-    //Error Handling
-    if(error0)return callback(error0,response);
-
-    log.info(`Channel created for ${params.routingKey}`)
-
-       //For Reciever 1
-        channel.assertQueue('',{exclusive:true},(error3,q)=>{
+  
+ //For Reciever 1
+        channel.assertQueue('',{autoDelete:true},(error3,q)=>{
             if(error3)
                return console.error(error3)
+            let consumertag=null;
             console.info(`Waiting for Requests in Que [${q.queue}]`)
             channel.bindQueue(q.queue,params.exchange,params.routingKey);
             channel.consume(q.queue,(msg)=>{
                 console.info(`Recieved :rID:${msg.properties.correlationId}`);
                 channel.ack(msg);
+               // channel.cancel(msg.fields.consumerTag)
+              
                 onRequest(JSON.parse(msg.content.toString()),(result)=>{
                      console.log('ID:'+msg.properties.correlationId+' replyTo:'+msg.properties.replyTo)
                         channel.sendToQueue(msg.properties.replyTo,Buffer.from(JSON.stringify(result)), {
@@ -78,13 +59,6 @@ connection.createChannel((error0,channel)=>{
             })
             
         })
-    
-    
-  })
- }).catch((error)=>{
-   log.error(error);
- })
-
   
 }
 module.exports={
