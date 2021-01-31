@@ -42,6 +42,7 @@ function RegisterQueueEvents()
                 PullRequest({exchange:'user',routingKey:'user.event.create'},channel,createEvent);
                 PullRequest({exchange:'user',routingKey:'user.event.update'},channel,updateEvent);
                 PullRequest({exchange:'user',routingKey:'user.event.delete'},channel,deleteEvent);
+                PullRequest({exchange:'user',routingKey:'user.event.fetch'},channel,fetchEvent);
                 log.info('Events Registered')  
          })
     })
@@ -98,4 +99,15 @@ const deleteEvent=async(data,onFinish)=>{
                     success:true,
                     message:'User with ID: '+data._id+' deleted.'
                 })
+}
+
+const fetchEvent= async(data,onFinish)=>{
+    Profile.find(data,(err,profiles)=>{
+        if(err)
+            return  onFinish(response={
+                    success:false,
+                    message:'No user with this ID exists'
+                })
+            return onFinish(profiles)
+    })
 }
