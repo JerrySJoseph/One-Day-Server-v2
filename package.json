@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-profile":"node API_Gateway/index.js",
+    "start-chat":"node Chat_Service/index.js",
+    "start-match":"node Match_Service/index.js",
+    "start-credit":"node Credit_Service/index.js"
   },
   "author": "",
   "license": "ISC",

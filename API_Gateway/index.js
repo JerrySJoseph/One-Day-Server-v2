@@ -25,8 +25,9 @@ const PORT= process.env.PORT | 3000
 const version='v2'
 
 app.use(express.json())
+
 //Routes
-//TODO: Add authorized Middleware before deploying to production
+//TODO: Add isAuthorized Middleware before deploying to production
 app.use(`/api/${version}/profile`,profileRouter)
 app.use(`/api/${version}/chat`,isAuthorized,chatRouter)
 app.use(`/api/${version}/credit`,isAuthorized,creditRouter)

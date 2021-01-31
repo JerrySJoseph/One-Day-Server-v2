@@ -1,12 +1,14 @@
 //Importing Required Libraries
 const mongoose=require('mongoose');
+//Models
 const Profile=require('./Models/Profile')
+//Custom Components and Helpers
 const log=require('./Utils/log');
 const Queue= require('../_commonUtils/RMQConnection')
 const {PullRequest}=require('../_commonUtils/RequestHandler')
 const {prepareProfileObject} = require('./Utils/ProfileHelper')
 
-
+//Initialize Profile Service System
 InitSystem();
 
 //Init Entire Service System
@@ -45,7 +47,7 @@ function RegisterQueueEvents()
     })
      
 }
-
+//Create Event handler
 const createEvent=(data,onFinish)=>{
      const userObject=prepareProfileObject(data);
             userObject.updateOne(userObject,{upsert:true},(err,result)=>{
@@ -64,6 +66,7 @@ const createEvent=(data,onFinish)=>{
             })
 }
 
+//Update Event Handler
 const updateEvent=async (data,onFinish)=>{
     const user=await Profile.findOne({_id:data._id})
     if(user)
@@ -87,7 +90,7 @@ const updateEvent=async (data,onFinish)=>{
                     message:'No user with this ID exists'
                 })
 }
-
+//Delete Event Handler 
 const deleteEvent=async(data,onFinish)=>{
 
     await Profile.deleteOne({_id:data._id})
