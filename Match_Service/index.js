@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 //Custom Components and Helpers
 const log=require('./Utils/log');
 const Queue= require('../_commonUtils/RMQConnection')
+const dbConnection=require('./Utils/MatchDatabase');
 const {PullRequest,PushRequest}=require('../_commonUtils/RequestHandler')
 
 const paramWeights={
@@ -21,10 +22,9 @@ InitSystem();
 function InitSystem()
 {
 //Connecting to Database
-mongoose.connect('mongodb://localhost:27017/one_day_matches_db',
-    {useNewUrlParser:true,useUnifiedTopology:true},
-    (error)=>{
-        if(error)
+
+dbConnection.Init((error)=>{
+if(error)
             {
                log.error(error.message);
                log.entry('Attempting to Reconnect to Database');
@@ -34,8 +34,13 @@ mongoose.connect('mongodb://localhost:27017/one_day_matches_db',
         log.info('Connected to Database')
         //Register Events after Database Connection
         RegisterQueueEvents();
+})
+  /*  mongoose.connect('mongodb://localhost:27017/one_day_matches_db',
+    {useNewUrlParser:true,useUnifiedTopology:true},
+    (error)=>{
+        
                
-    })
+    })*/
 
 }
 
@@ -74,10 +79,10 @@ function generateMatches(data,channel,onFinish) {
 
             if(result.length>data.matchCount)
                 result=result.filter(item=>data.district===item.district)
-            shuffleArray(result)
+          //  shuffleArray(result)
             const mylat=(data.mylat)
             const mylon=(data.mylon)
-           //return onFinish(result);
+        //   return onFinish(result);
             result.forEach((item,index)=>{
                 ageDiff=getAgeFromtimestamp(data.age)-getAgeFromtimestamp(item.dob)
                 
@@ -102,13 +107,32 @@ function generateMatches(data,channel,onFinish) {
                     score:getScore(data.dl,data.al,d,ageDiff,(data.school==item.school),item.verified,true)})
             })
             models=models.sort((a,b)=>b.score-a.score).slice(0,data.matchCount);
-                            onFinish({
+            const match_data={
+                                _id:data._id,
                                 requestID:params.requestID,
                                 requestat:Date.now(),
                                 expiresat:(Date.now()+(1000*60*60*24)),
                                 matchCount:models.length,
-                                models:models
-                            })
+                                result:models
+                            };
+            dbConnection.matchDatabase.collection('match_data').updateOne({_id:data._id},{$set:match_data},{upsert:true},(err,result)=>{
+                 if(err)
+                    {console.log(err)
+                    onFinish({
+                        success:false,
+                        msg:"MATCH files write error"
+                    })}
+                    else
+                    onFinish({
+                        success:true,
+                         requestID:params.requestID,
+                         requestat:Date.now(),
+                         expiresat:(Date.now()+(1000*60*60*24)),
+                        matchCount:models.length,
+                        result:models
+                    })
+            })
+                            
                         })
 }
 
