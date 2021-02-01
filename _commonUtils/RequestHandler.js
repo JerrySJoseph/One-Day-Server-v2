@@ -2,7 +2,7 @@ const log=require('./log');
 
 async function PushRequest(params,channel,callback)
 {
-  
+  channel.assertExchange(params.exchange,'topic',{durable:false});
 /************************** Establishing QUEUE*********************** */
         channel.assertQueue('',{autoDelete:true},(error3,q)=>{
             if(error3)
@@ -13,7 +13,7 @@ async function PushRequest(params,channel,callback)
               
               if (msg.properties.correlationId == params.requestID)
               {
-                console.info(`${q.queue} RPS RECIEVER: ${msg.content.toString()}`);
+                console.info(`${q.queue} RPS Recieved of size: ${msg.content.toString().length} bytes`);
                 channel.ack(msg);
               
                channel.cancel(msg.fields.consumerTag);
@@ -23,7 +23,6 @@ async function PushRequest(params,channel,callback)
             })
 
             //******************** PUBLISHER EVENT **************************/
-            channel.assertExchange(params.exchange,'topic',{durable:false});
             channel.publish(params.exchange,params.routingKey,Buffer.from(params.data.toString()),{ 
               correlationId: params.requestID, 
               replyTo: q.queue 
@@ -34,7 +33,7 @@ async function PushRequest(params,channel,callback)
 }
 async function PullRequest(params,channel,onRequest){
 
-  
+  channel.assertExchange(params.exchange,'topic',{durable:false});
  //For Reciever 1
         channel.assertQueue('',{autoDelete:true},(error3,q)=>{
             if(error3)
@@ -48,7 +47,7 @@ async function PullRequest(params,channel,onRequest){
                // channel.cancel(msg.fields.consumerTag)
               
                 onRequest(JSON.parse(msg.content.toString()),(result)=>{
-                     console.log('ID:'+msg.properties.correlationId+' replyTo:'+msg.properties.replyTo)
+                     console.log('rID:'+msg.properties.correlationId+' replyTo:'+msg.properties.replyTo)
                         channel.sendToQueue(msg.properties.replyTo,Buffer.from(JSON.stringify(result)), {
                         correlationId: msg.properties.correlationId
                         })

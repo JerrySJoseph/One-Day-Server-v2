@@ -25,8 +25,8 @@ const createProfileValidator= (data)=>{
             email:JoiValidator.string(),
             district:JoiValidator.string().required(),
             state:JoiValidator.string().required(),
-            latitude:JoiValidator.string().required(),
-            longitude:JoiValidator.string().required(),
+            latitude:JoiValidator.number().required(),
+            longitude:JoiValidator.number().required(),
             authMethod:JoiValidator.string().required(),
             country:JoiValidator.string().required()
 
@@ -67,6 +67,28 @@ const updateProfileValidator= (data)=>{
     )
     return validatorSchema.validate(data)
 }
+const matchValidator= (data)=>{
+    const validatorSchema=JoiValidator.object(
+        {
+            _id:JoiValidator.string().required(),
+            dl:JoiValidator.number().required(),
+            al:JoiValidator.number().required(),
+            state:JoiValidator.string().required(),
+            district:JoiValidator.string().required(),
+            gender:JoiValidator.string().required(),
+            interestedIn:JoiValidator.string().required(),
+            age:JoiValidator.number().required(),
+            verified:JoiValidator.boolean().required(),
+            misc:JoiValidator.boolean().required(),
+            mylat:JoiValidator.number().required(),
+            mylon:JoiValidator.number().required(),
+            matchCount:JoiValidator.number().required()
+        }
+    )
+    return validatorSchema.validate(data)
+}
+
 //Exporting Validator Modules for access in other files
 module.exports.createProfileValidator=createProfileValidator;
 module.exports.updateProfileValidator=updateProfileValidator;
+module.exports.matchValidator=matchValidator;

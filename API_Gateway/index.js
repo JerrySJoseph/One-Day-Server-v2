@@ -32,7 +32,7 @@ app.use(express.json())
 app.use(`/api/${version}/profile`,profileRouter)
 app.use(`/api/${version}/chat`,isAuthorized,chatRouter)
 app.use(`/api/${version}/credit`,isAuthorized,creditRouter)
-app.use(`/api/${version}/match`,isAuthorized,matchRouter)
+app.use(`/api/${version}/match`,matchRouter)
 
 //Listening to PORT for requests
 app.listen(PORT,(err)=>log.entry("Application has started in PORT:"+PORT))

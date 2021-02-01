@@ -11,7 +11,7 @@ const ProfileSchema=new mongoose.Schema({
         max:255
     },
     dob:{
-        type:Date,
+        type:Number,
         required:true,
     },
     bio:{
