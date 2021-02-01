@@ -1,6 +1,6 @@
 //Importing Required Libraries
 const mongoose=require('mongoose');
-
+const { v4: uuidv4 } = require('uuid');
 //Custom Components and Helpers
 const log=require('./Utils/log');
 const Queue= require('../_commonUtils/RMQConnection')
@@ -47,7 +47,6 @@ function RegisterQueueEvents()
          connection.createChannel((err,channel)=>{
             
                PullRequest({exchange:'match',routingKey:'match.event.generate'},channel,(data,onFinish)=>{
-                     console.log(data)
                     generateMatches(data,channel,onFinish)
                      
                    
@@ -66,7 +65,7 @@ function generateMatches(data,channel,onFinish) {
     const params={
                     exchange:'user',
                     routingKey:'user.event.fetch',
-                    requestID:getUniqueID(),
+                    requestID:uuidv4(),
                     data:JSON.stringify({state:data.state,gender:data.interestedIn,interestedIn:data.gender})
                     }
 
@@ -81,7 +80,7 @@ function generateMatches(data,channel,onFinish) {
            //return onFinish(result);
             result.forEach((item,index)=>{
                 ageDiff=getAgeFromtimestamp(data.age)-getAgeFromtimestamp(item.dob)
-                console.log(item.dob)
+                
                 const d=calcdistance(mylat,mylon,item.latitude,item.longitude,"K");
                 models.push({
                     _id:item._id,
@@ -100,16 +99,19 @@ function generateMatches(data,channel,onFinish) {
                     interests:item.interests,
                     gender:item.gender,
                     portfolio:item.portfolio,
-                    score:getScore(data.dl,data.al,d,ageDiff,(true),item.verified,true)})
+                    score:getScore(data.dl,data.al,d,ageDiff,(data.school==item.school),item.verified,true)})
             })
             models=models.sort((a,b)=>b.score-a.score).slice(0,data.matchCount);
-                            onFinish(models)
+                            onFinish({
+                                requestID:params.requestID,
+                                requestat:Date.now(),
+                                expiresat:(Date.now()+(1000*60*60*24)),
+                                matchCount:models.length,
+                                models:models
+                            })
                         })
 }
 
-var getUniqueID = function () {
-  return ('_'+Date.now().toString(36) + Math.random().toString(36)).substr(2, 12);
-};
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {

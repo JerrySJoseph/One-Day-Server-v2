@@ -76,6 +76,7 @@ const matchValidator= (data)=>{
             state:JoiValidator.string().required(),
             district:JoiValidator.string().required(),
             gender:JoiValidator.string().required(),
+            school:JoiValidator.string().required(),
             interestedIn:JoiValidator.string().required(),
             age:JoiValidator.number().required(),
             verified:JoiValidator.boolean().required(),
