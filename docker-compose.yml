@@ -22,17 +22,25 @@ services:
       - PROFILE_DB_CONNECTION_STRING=mongodb://db/one_day_profiles_db
       - MATCH_COUNT=15
 
-  nginx:
-    image: nginx
-
-
-
   db:
+    container_name: mongo-dependency
     image: mongo
     ports: 
       - "27017:27017"
+    volumes:
+            - ./rabbitmq/etc/:/etc/rabbitmq/
+            - ./rabbitmq/data/:/var/lib/rabbitmq/
+            - ./rabbitmq/logs/:/var/log/rabbitmq/
+
+  rabbitmq:
+    container_name: rabbitmq-dependency
+    image: rabbitmq:latest
+    ports:
+            - 5672:5672
+            - 15672:15672
 
   nginx:
+    container_name: nginx-dependency
     image: nginx:latest
     ports: 
       - "8080:8080"
