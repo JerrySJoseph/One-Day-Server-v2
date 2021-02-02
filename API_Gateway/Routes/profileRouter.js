@@ -15,10 +15,10 @@ function getChannel(req,res,next) {
           //Validate information payload
         const {error}=getVallidator(req)
         if(error)
-            return res.status(406).send(
+            return res.status(200).send(
                       {
                           "success":false,
-                            "msg":error.details[0].message
+                            "message":error.details[0].message
                       })
 
       if(channel==null)
@@ -40,7 +40,7 @@ function getChannel(req,res,next) {
       return res.status(406).send(
                       {
                           "success":false,
-                            "msg":error
+                            "message":error
                       })
     }  
      
