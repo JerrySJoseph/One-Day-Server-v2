@@ -14,6 +14,7 @@ const { isAuthorized } = require('./Utils/Authorization');
 //Initialising Express Server
 const app=express();
 
+
 //Initialising Queue for inter Service communications
 Queue.getMyConnection
     .then(()=>log.info('GATEWAY QUEUE STARTED'))
@@ -36,3 +37,4 @@ app.use(`/api/${version}/match`,matchRouter)
 
 //Listening to PORT for requests
 app.listen(PORT,(err)=>log.entry("Application has started in PORT:"+PORT))
+module.exports.Queue=Queue;
