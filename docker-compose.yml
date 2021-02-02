@@ -1,0 +1,41 @@
+version: "2"
+services: 
+  api-gateway:
+    container_name: api-gateway
+    build: './API_Gateway'
+    restart: unless-stopped
+    depends_on: nginx
+
+  profile-service:
+    container_name: profile-service
+    build: './Profile_Service'
+    restart: unless-stopped
+    depends_on: db
+
+  match-service:
+    container_name: match-service
+    build: './Match_Service'
+    restart: unless-stopped
+    depends_on: db
+    environment: 
+      - MATCH_DB_CONNECTION_STRING=mongodb://db/one_day_matches_db
+      - PROFILE_DB_CONNECTION_STRING=mongodb://db/one_day_profiles_db
+      - MATCH_COUNT=15
+
+  nginx:
+    image: nginx
+
+
+
+  db:
+    image: mongo
+    ports: 
+      - "27017:27017"
+
+  nginx:
+    image: nginx:latest
+    ports: 
+      - "8080:8080"
+    volumes: 
+      - ./public:./srv/www/static
+      - ./default.conf:./etc/nginx/conf.d/default.conf
