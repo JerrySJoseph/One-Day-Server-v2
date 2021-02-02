@@ -6,6 +6,7 @@ const {PushRequest}=require('../../_commonUtils/RequestHandler');
 const validator = require('../Utils/Validator');
 const Profile = require('../../Profile_Service/Models/Profile');
 
+//This is a workflow channel check
 //Cached Channel
 let channel=null;
 
