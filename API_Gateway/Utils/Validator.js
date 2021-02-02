@@ -82,8 +82,7 @@ const matchValidator= (data)=>{
             verified:JoiValidator.boolean().required(),
             misc:JoiValidator.boolean().required(),
             mylat:JoiValidator.number().required(),
-            mylon:JoiValidator.number().required(),
-            matchCount:JoiValidator.number().required()
+            mylon:JoiValidator.number().required()
         }
     )
     return validatorSchema.validate(data)

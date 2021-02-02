@@ -6,7 +6,10 @@ const log=require('./Utils/log');
 const Queue= require('../_commonUtils/RMQConnection')
 const dbConnection=require('./Utils/MatchDatabase');
 const {PullRequest,PushRequest}=require('../_commonUtils/RequestHandler')
+const dotenv=require('dotenv');
 
+//Configuring dotenv for accessing Environment Variables
+dotenv.config();
 const paramWeights={
     age:50,
     distance:20,
@@ -67,6 +70,7 @@ function RegisterQueueEvents()
 
 function generateMatches(data,channel,onFinish) {
     let models=[]
+    const matchCount=process.env.MATCH_COUNT;
     const params={
                     exchange:'user',
                     routingKey:'user.event.fetch',
@@ -77,7 +81,7 @@ function generateMatches(data,channel,onFinish) {
     //Fetch Users in same state with same sex interests
     PushRequest(params,channel,(result)=>{
 
-            if(result.length>data.matchCount)
+            if(result.length>matchCount)
                 result=result.filter(item=>data.district===item.district)
           //  shuffleArray(result)
             const mylat=(data.mylat)
@@ -106,7 +110,7 @@ function generateMatches(data,channel,onFinish) {
                     portfolio:item.portfolio,
                     score:getScore(data.dl,data.al,d,ageDiff,(data.school==item.school),item.verified,true)})
             })
-            models=models.sort((a,b)=>b.score-a.score).slice(0,data.matchCount);
+            models=models.sort((a,b)=>b.score-a.score).slice(0,matchCount);
             const match_data={
                                 _id:data._id,
                                 requestID:params.requestID,
