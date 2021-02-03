@@ -1,18 +1,19 @@
-FROM node:latest
+FROM node:14
 
-RUN mkdir -p /profile_service
 # Create app directory
+WORKDIR /usr/src/app
 
-WORKDIR /profile_service
 # Install app dependencies
-
-COPY package.json /profile_service
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY package*.json ./
 
 RUN npm install
+# If you are building your code for production
+# RUN npm ci --only=production
 
-# Copy app source code
-COPY . /profile_service
-#Expose port and start application
+# Bundle app source
+COPY . .
+
 EXPOSE 3000
-
-CMD [ "npm", "start" ]
+CMD [ "node", "index.js" ]

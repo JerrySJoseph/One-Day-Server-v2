@@ -1,22 +1,19 @@
-FROM node:latest
+FROM node:14
 
-RUN mkdir -p /usr/src/app
 # Create app directory
-
 WORKDIR /usr/src/app
+
 # Install app dependencies
-
-COPY package.json /usr/src/app
-
-RUN ls
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY package*.json ./
 
 RUN npm install
+# If you are building your code for production
+# RUN npm ci --only=production
 
-
-# Copy app source code
-COPY . /usr/src/app
-#Expose port and start application
+# Bundle app source
+COPY . .
 
 EXPOSE 3000
-
-CMD [ "npm", "start" ]
+CMD [ "node", "index.js" ]
