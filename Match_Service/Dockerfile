@@ -8,6 +8,8 @@ WORKDIR /match_service
 
 COPY package.json /match_service
 
+RUN ls
+
 RUN npm ci
 
 

@@ -8,6 +8,8 @@ WORKDIR /profile_service
 
 COPY package.json /profile_service
 
+RUN ls
+
 RUN npm ci
 
 # Copy app source code

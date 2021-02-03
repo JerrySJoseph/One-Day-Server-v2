@@ -7,6 +7,8 @@ WORKDIR /api_gateway
 # Install app dependencies
 
 COPY package.json /api_gateway
+RUN ls
+
 
 RUN npm ci
 
