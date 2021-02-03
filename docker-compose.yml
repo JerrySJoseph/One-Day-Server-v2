@@ -2,7 +2,7 @@ version: "2"
 services: 
   api-gateway:
     container_name: api-gateway
-    build: './API_Gateway'
+    build: '/API_Gateway'
     ports: 
       - "3000:3000"
     #restart: unless-stopped
@@ -11,14 +11,14 @@ services:
 
   profile-service:
     container_name: profile-service
-    build: './Profile_Service'
+    build: '/Profile_Service'
    # restart: unless-stopped
     depends_on: 
       - db
 
   match-service:
     container_name: match-service
-    build: './Match_Service'
+    build: '/Match_Service'
    # restart: unless-stopped
     depends_on: 
       - db
