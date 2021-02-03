@@ -1,12 +1,12 @@
 FROM node:latest
 
-RUN mkdir -p api_gateway
+RUN mkdir -p /api_gateway
 # Create app directory
 
 WORKDIR /api_gateway
 # Install app dependencies
 
-COPY package.json api_gateway
+COPY package.json /api_gateway
 
 RUN npm ci
 
