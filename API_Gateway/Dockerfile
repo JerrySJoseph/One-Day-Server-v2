@@ -8,7 +8,8 @@ WORKDIR /api_gateway
 
 COPY package.json api_gateway
 
-RUN npm install
+RUN npm ci
+
 
 # Copy app source code
 COPY . /api_gateway

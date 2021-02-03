@@ -6,9 +6,10 @@ RUN mkdir -p match_service
 WORKDIR /match_service
 # Install app dependencies
 
-COPY package*.json match_service
+COPY package.json match_service
 
-RUN npm install
+RUN npm ci
+
 
 # Copy app source code
 COPY . match_service

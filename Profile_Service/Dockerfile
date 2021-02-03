@@ -8,7 +8,8 @@ WORKDIR /profile_service
 
 COPY package*.json profile_service
 
-RUN npm install
+RUN npm ci
+
 # Copy app source code
 COPY . profile_service
 #Expose port and start application
