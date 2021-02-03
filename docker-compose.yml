@@ -7,7 +7,7 @@ services:
       - "3000:3000"
     #restart: unless-stopped
     volumes:
-      - .:/usr/src/app
+      - .:/usr/src/app/api-gateway
     depends_on: 
       - nginx
 
@@ -18,14 +18,14 @@ services:
     depends_on: 
       - db
     volumes:
-      - .:/usr/src/app
+      - .:/usr/src/app/profile-service
 
   match-service:
     container_name: match-service
     build: './Match_Service'
     #restart: unless-stopped
     volumes:
-      - .:/usr/src/app
+      - .:/usr/src/app/match-service
     depends_on: 
       - db
     environment: 
