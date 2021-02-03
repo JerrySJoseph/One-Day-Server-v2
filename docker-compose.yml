@@ -2,24 +2,33 @@ version: "2"
 services: 
   api-gateway:
     container_name: api-gateway
-    build: '/API_Gateway'
+    build: './API_Gateway'
     ports: 
       - "3000:3000"
     #restart: unless-stopped
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
     depends_on: 
       - nginx
 
   profile-service:
     container_name: profile-service
-    build: '/Profile_Service'
-   # restart: unless-stopped
+    build: './Profile_Service'
+    #restart: unless-stopped
     depends_on: 
       - db
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
 
   match-service:
     container_name: match-service
-    build: '/Match_Service'
-   # restart: unless-stopped
+    build: './Match_Service'
+    #restart: unless-stopped
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
     depends_on: 
       - db
     environment: 
