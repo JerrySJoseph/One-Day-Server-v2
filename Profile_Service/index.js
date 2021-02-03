@@ -11,9 +11,8 @@ const {prepareProfileObject} = require('./Utils/ProfileHelper')
 //Initialize Profile Service System
 InitSystem();
 
-let DB_URI=process.env.PROFILE_DB_CONNECTION_STRING;
-if(!DB_URI)
-    DB_URI='mongodb://localhost:27017/one_day_profiles_db';
+
+ let DB_URI='mongodb://localhost:27017/one_day_profiles_db';
 //Init Entire Service System
 function InitSystem()
 {
