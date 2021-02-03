@@ -1,19 +1,14 @@
 FROM node:14
 
-RUN mkdir /usr/src/app
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app/api_gateway
 
-# Bundle app source
-COPY . .
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-#COPY package*.json ./
+COPY package.json /usr/src/app/api_gateway
+COPY package-lock.json /usr/src/app/api_gateway
 
-RUN npm install --production
-# If you are building your code for production
-# RUN npm ci --only=production
+RUN npm ci
+
+COPY . /usr/src/app/api_gateway
 
 
 EXPOSE 3000

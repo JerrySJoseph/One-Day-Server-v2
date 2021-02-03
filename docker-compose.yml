@@ -2,9 +2,8 @@ version: "2"
 services: 
   api-gateway:
     container_name: api-gateway
-    build:
-      context:  './API_Gateway'
-      dockerfile: './API_Gateway/Dockerfile'
+    build: './API_Gateway'
+    hostname: API_Gateway
     ports: 
       - "3000:3000"
     #restart: unless-stopped
