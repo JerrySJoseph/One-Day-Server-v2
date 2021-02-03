@@ -13,26 +13,26 @@ InitSystem();
 
 let DB_URI=process.env.PROFILE_DB_CONNECTION_STRING;
 if(!DB_URI)
- DB_URI='mongodb://localhost:27017/one_day_profiles_db';
+    DB_URI='mongodb://localhost:27017/one_day_profiles_db';
 //Init Entire Service System
 function InitSystem()
 {
-//Connecting to Database
-mongoose.connect(DB_URI,
-    {useNewUrlParser:true,useUnifiedTopology:true},
-    (error)=>{
-        if(error)
-            {
-               log.error(error.message);
-               log.entry('Attempting to Reconnect to Database');
-               InitSystem();
-            } 
-        
-        log.info('Connected to Database')
-        //Register Events after Database Connection
-        RegisterQueueEvents();
-               
-    })
+    //Connecting to Database
+    mongoose.connect(DB_URI,
+        {useNewUrlParser:true,useUnifiedTopology:true},
+        (error)=>{
+            if(error)
+                {
+                log.error(error.message);
+                log.entry('Attempting to Reconnect to Database');
+                InitSystem();
+                } 
+            
+            log.info('Connected to Database')
+            //Register Events after Database Connection
+            RegisterQueueEvents();
+                
+        })
 
 }
 
