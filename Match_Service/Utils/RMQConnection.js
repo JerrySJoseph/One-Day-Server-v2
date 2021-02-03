@@ -1,8 +1,9 @@
 //Importing requried libraries
 const amqp=require('amqplib/callback_api');
 //url for RabbitMQ Server
-const Url='amqp://localhost'
-
+const Url=process.env.RABBIT_MQ_URI
+if(!Url)
+    Url='amqp://localhost:5672'
 let conn=null;
 
 //Closing the Queue Connection

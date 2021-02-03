@@ -4,8 +4,8 @@ const mongoose=require('mongoose');
 const Profile=require('./Models/Profile')
 //Custom Components and Helpers
 const log=require('./Utils/log');
-const Queue= require('../_commonUtils/RMQConnection')
-const {PullRequest}=require('../_commonUtils/RequestHandler')
+const Queue= require('./Utils/RMQConnection')
+const {PullRequest}=require('./Utils/RequestHandler')
 const {prepareProfileObject} = require('./Utils/ProfileHelper')
 
 //Initialize Profile Service System
@@ -15,7 +15,7 @@ InitSystem();
 function InitSystem()
 {
 //Connecting to Database
-mongoose.connect('mongodb://localhost:27017/one_day_profiles_db',
+mongoose.connect(process.env.PROFILE_DB_CONNECTION_STRING,
     {useNewUrlParser:true,useUnifiedTopology:true},
     (error)=>{
         if(error)

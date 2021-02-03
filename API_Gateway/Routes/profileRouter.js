@@ -1,8 +1,8 @@
 //Importing Required libraries
 const router=require('express').Router();
-const Queue=require('./Utils/RMQConnection')
+const Queue=require('../Utils/RMQConnection')
 const log=require('../Utils/log')
-const {PushRequest}=require('./Utils/RequestHandler');
+const {PushRequest}=require('../Utils/RequestHandler');
 const validator = require('../Utils/Validator');
 
 //This is a workflow channel check

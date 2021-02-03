@@ -3,13 +3,10 @@ const mongoose=require('mongoose');
 const { v4: uuidv4 } = require('uuid');
 //Custom Components and Helpers
 const log=require('./Utils/log');
-const Queue= require('../_commonUtils/RMQConnection')
+const Queue= require('./Utils/RMQConnection')
 const dbConnection=require('./Utils/MatchDatabase');
-const {PullRequest,PushRequest}=require('../_commonUtils/RequestHandler')
-const dotenv=require('dotenv');
+const {PullRequest,PushRequest}=require('./Utils/RequestHandler')
 
-//Configuring dotenv for accessing Environment Variables
-dotenv.config();
 const paramWeights={
     age:50,
     distance:20,
