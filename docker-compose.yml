@@ -2,15 +2,12 @@ version: "2"
 services: 
   api-gateway:
     container_name: api-gateway
-    build:
-      context:  './API_Gateway'
-      dockerfile: './API_Gateway/Dockerfile'
+    build: './API_Gateway'
+    #  context:  
+     # dockerfile: './API_Gateway/Dockerfile'
     ports: 
       - "3000:3000"
     #restart: unless-stopped
-    volumes:
-      - ./API_Gateway:/usr/src/app
-      - ./API_Gateway/node_modules:/usr/src/app/node_modules
     depends_on: 
       - nginx
 
