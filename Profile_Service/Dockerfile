@@ -6,7 +6,7 @@ RUN mkdir -p usr/src/app/profile_service
 WORKDIR /usr/src/app/profile_service
 # Install app dependencies
 
-COPY package.json usr/src/app/profile_service
+COPY package*.json usr/src/app/profile_service
 
 RUN npm install
 # Copy app source code
