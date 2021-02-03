@@ -10,6 +10,7 @@ services:
     #restart: unless-stopped
     volumes:
       - ./API_Gateway:/usr/src/app
+      - ./API_Gateway/node_modules:/usr/src/app/node_modules
     depends_on: 
       - nginx
 
@@ -23,6 +24,7 @@ services:
       - db
     volumes:
       - ./Profile_Service:/usr/src/app
+      - ./Profile_Service/node_modules:/usr/src/app/node_modules
 
   match-service:
     container_name: match-service
@@ -32,6 +34,7 @@ services:
     #restart: unless-stopped
     volumes:
       - ./Match_Service:/usr/src/app
+      - ./Match_Service/node_modules:/usr/src/app/node_modules
     depends_on: 
       - db
     environment: 

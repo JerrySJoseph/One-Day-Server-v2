@@ -25,12 +25,12 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Build the docker-compose stack
       run: docker-compose -f docker-compose.yml up -d
-    - name: Check running containers
-      run: docker ps -a
     - name: Check logs for Gateway API
       run: docker logs api-gateway
     - name: Check logs for Match Service
       run: docker logs match-service
     - name: Check logs for Profile Service
       run: docker logs profile-service
+    - name: Check running containers
+      run: docker ps -a
     
