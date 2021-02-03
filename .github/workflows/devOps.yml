@@ -23,8 +23,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: pwd
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
-    - run: docker-compose up 
+    - name: Build the docker-compose stack
+      run: docker-compose -f docker-compose.yml up -d
+    - name: Check running containers
+      run: docker ps -a
+    - name: Check logs
+      run: docker logs backend
+    
