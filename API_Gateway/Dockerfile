@@ -1,20 +1,20 @@
 FROM node:latest
 
-RUN mkdir -p /api_gateway
+RUN mkdir -p /usr/src/app
 # Create app directory
 
-WORKDIR /api_gateway
+WORKDIR /usr/src/app
 # Install app dependencies
 
-COPY package.json /api_gateway
-RUN ls
+COPY package.json /usr/src/app
 
+RUN ls
 
 RUN npm install
 
 
 # Copy app source code
-COPY . /api_gateway
+COPY . /usr/src/app
 #Expose port and start application
 
 EXPOSE 3000
