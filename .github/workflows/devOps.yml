@@ -27,6 +27,10 @@ jobs:
       run: docker-compose -f docker-compose.yml up -d
     - name: Check running containers
       run: docker ps -a
-    - name: Check logs
-      run: docker logs backend
+    - name: Check logs for Gateway API
+      run: docker logs api-gateway
+    - name: Check logs for Match Service
+      run: docker logs match_service
+    - name: Check logs for Profile Service
+      run: docker logs profile_service
     
