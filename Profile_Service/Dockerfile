@@ -10,7 +10,7 @@ COPY package.json /profile_service
 
 RUN ls
 
-RUN npm ci
+RUN npm install
 
 # Copy app source code
 COPY . /profile_service

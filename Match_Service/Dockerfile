@@ -10,7 +10,7 @@ COPY package.json /match_service
 
 RUN ls
 
-RUN npm ci
+RUN npm install
 
 
 # Copy app source code

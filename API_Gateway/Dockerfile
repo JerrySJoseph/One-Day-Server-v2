@@ -10,7 +10,7 @@ COPY package.json /api_gateway
 RUN ls
 
 
-RUN npm ci
+RUN npm install
 
 
 # Copy app source code
