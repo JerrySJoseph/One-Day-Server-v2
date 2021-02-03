@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "start": "node index.js",
-    "dev-start": "nodemon index.js"
+    "start": "node index.js"
   },
   "author": "Jerry S Joseph",
   "license": "ISC",
