@@ -3,6 +3,7 @@ services:
   api-gateway:
     container_name: api-gateway
     build: './API_Gateway'
+    dockerfile: './API_Gateway/Dockerfile'
     ports: 
       - "3000:3000"
     #restart: unless-stopped
@@ -14,6 +15,7 @@ services:
   profile-service:
     container_name: profile-service
     build: './Profile_Service'
+    dockerfile: './Profile_Service/Dockerfile'
     #restart: unless-stopped
     depends_on: 
       - db
@@ -23,6 +25,7 @@ services:
   match-service:
     container_name: match-service
     build: './Match_Service'
+    dockerfile: './Match_Service/Dockerfile'
     #restart: unless-stopped
     volumes:
       - ./Match_Service:/usr/src/app
