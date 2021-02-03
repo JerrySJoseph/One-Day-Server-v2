@@ -3,7 +3,6 @@ const express=require('express');
 const Queue=require('./Utils/RMQConnection')
 const log=require('./Utils/log');
 
-//This is check for CD via github actions
 //Importing Routers
 const profileRouter=require('./Routes/profileRouter');
 const chatRouter=require('./Routes/chatRouter');
