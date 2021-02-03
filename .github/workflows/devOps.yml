@@ -30,7 +30,7 @@ jobs:
     - name: Check logs for Gateway API
       run: docker logs api-gateway
     - name: Check logs for Match Service
-      run: docker logs match_service
+      run: docker logs match-service
     - name: Check logs for Profile Service
-      run: docker logs profile_service
+      run: docker logs profile-service
     
